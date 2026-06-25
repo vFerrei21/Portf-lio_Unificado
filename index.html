@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VFERREI // PORTFOLIO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #0a0a0f;
+    --surface: #0f0f1a;
+    --card: #12121f;
+    --cyan: #00ffe5;
+    --magenta: #ff2d78;
+    --violet: #7b2fff;
+    --text: #c8c8ff;
+    --dim: #5a5a8a;
+    --white: #eeeeff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* GRID BACKGROUND */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 255, 229, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 229, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(10, 10, 15, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 255, 229, 0.15);
+  }
+
+  .nav-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: var(--cyan);
+    letter-spacing: 0.2em;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--magenta); }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--cyan); }
+
+  /* HERO */
+  #hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 8rem 3rem 4rem;
+    max-width: 900px;
+  }
+
+  .hero-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--cyan);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+
+  .hero-label::before {
+    content: '// ';
+    color: var(--magenta);
+  }
+
+  h1.glitch {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.8rem, 7vw, 6rem);
+    line-height: 1;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    position: relative;
+    margin-bottom: 0.5rem;
+  }
+
+  h1.glitch::before,
+  h1.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  h1.glitch::before {
+    color: var(--cyan);
+    animation: glitch-1 4s infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+  }
+
+  h1.glitch::after {
+    color: var(--magenta);
+    animation: glitch-2 4s infinite;
+    clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+  }
+
+  @keyframes glitch-1 {
+    0%, 90%, 100% { transform: none; opacity: 0; }
+    92% { transform: translateX(-3px); opacity: 1; }
+    94% { transform: translateX(3px); opacity: 1; }
+    96% { transform: none; opacity: 0; }
+  }
+
+  @keyframes glitch-2 {
+    0%, 88%, 100% { transform: none; opacity: 0; }
+    90% { transform: translateX(3px); opacity: 1; }
+    93% { transform: translateX(-2px); opacity: 1; }
+    95% { transform: none; opacity: 0; }
+  }
+
+  .hero-sub {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    font-weight: 400;
+    color: var(--violet);
+    letter-spacing: 0.15em;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+  }
+
+  .hero-desc {
+    font-size: 0.9rem;
+    color: var(--dim);
+    max-width: 480px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--cyan);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border: 1px solid var(--cyan);
+    padding: 0.8rem 2rem;
+    position: relative;
+    transition: all 0.3s;
+    overflow: hidden;
+  }
+
+  .hero-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--cyan);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+    z-index: -1;
+  }
+
+  .hero-cta:hover::before { transform: translateX(0); }
+  .hero-cta:hover { color: var(--void); }
+
+  /* CORNER DECO */
+  .corner-deco {
+    position: absolute;
+    right: 4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 0.3;
+  }
+
+  .corner-deco span {
+    display: block;
+    width: 1px;
+    background: var(--cyan);
+    animation: pulse-bar 2s ease-in-out infinite;
+  }
+
+  .corner-deco span:nth-child(1) { height: 80px; animation-delay: 0s; }
+  .corner-deco span:nth-child(2) { height: 40px; animation-delay: 0.2s; }
+  .corner-deco span:nth-child(3) { height: 120px; animation-delay: 0.4s; }
+  .corner-deco span:nth-child(4) { height: 60px; animation-delay: 0.6s; }
+  .corner-deco span:nth-child(5) { height: 90px; animation-delay: 0.8s; }
+
+  @keyframes pulse-bar {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* SECTION */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--magenta);
+    text-transform: uppercase;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--magenta), transparent);
+    max-width: 200px;
+  }
+
+  h2.section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    margin-bottom: 3rem;
+  }
+
+  /* PROJECT GRID */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* PROJECT CARD */
+  .project-card {
+    position: relative;
+    background: var(--card);
+    border: 1px solid rgba(0, 255, 229, 0.12);
+    padding: 2rem;
+    text-decoration: none;
+    display: block;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: pointer;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+  }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(0, 255, 229, 0.05) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .project-card:hover {
+    border-color: rgba(0, 255, 229, 0.5);
+    transform: translateY(-4px);
+  }
+
+  .project-card:hover::before { transform: translateX(100%); }
+  .project-card:hover::after { opacity: 1; }
+
+  /* Corner brackets */
+  .project-card .bracket-tl,
+  .project-card .bracket-br {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    transition: all 0.3s;
+  }
+
+  .bracket-tl {
+    top: 8px; left: 8px;
+    border-top: 1px solid var(--cyan);
+    border-left: 1px solid var(--cyan);
+    opacity: 0;
+  }
+
+  .bracket-br {
+    bottom: 8px; right: 8px;
+    border-bottom: 1px solid var(--cyan);
+    border-right: 1px solid var(--cyan);
+    opacity: 0;
+  }
+
+  .project-card:hover .bracket-tl,
+  .project-card:hover .bracket-br { opacity: 1; }
+
+  .card-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tag-cyan { color: var(--cyan); border-color: rgba(0, 255, 229, 0.4); }
+  .tag-magenta { color: var(--magenta); border-color: rgba(255, 45, 120, 0.4); }
+  .tag-violet { color: var(--violet); border-color: rgba(123, 47, 255, 0.4); }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-desc {
+    font-size: 0.8rem;
+    color: var(--dim);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stack-pill {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.5rem;
+    background: rgba(123, 47, 255, 0.15);
+    color: var(--violet);
+    border: 1px solid rgba(123, 47, 255, 0.3);
+  }
+
+  .card-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    color: var(--cyan);
+    margin-top: 1.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+    transition: gap 0.2s;
+  }
+
+  .project-card:hover .card-link { gap: 0.9rem; }
+
+  .card-link svg {
+    width: 14px; height: 14px;
+    transition: transform 0.2s;
+  }
+
+  .project-card:hover .card-link svg { transform: translateX(3px); }
+
+  /* ABOUT SECTION */
+  #sobre {
+    border-top: 1px solid rgba(0, 255, 229, 0.08);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    font-size: 0.85rem;
+    color: var(--dim);
+    line-height: 1.9;
+    margin-bottom: 1rem;
+  }
+
+  .about-text p strong { color: var(--cyan); font-weight: 400; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .stat-box {
+    background: var(--card);
+    border: 1px solid rgba(123, 47, 255, 0.2);
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-box::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--violet), transparent);
+  }
+
+  .stat-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--cyan);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(0, 255, 229, 0.08);
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 1rem;
+  }
+
+  .footer-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    color: var(--dim);
+    letter-spacing: 0.2em;
+  }
+
+  .footer-logo span { color: var(--magenta); }
+
+  .footer-copy {
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  .github-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--cyan);
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    transition: color 0.2s;
+  }
+
+  .github-link:hover { color: var(--white); }
+
+  /* CURSOR GLOW */
+  .cursor-glow {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 255, 229, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 998;
+    transition: opacity 0.3s;
+  }
+
+  /* NEON TEXT ACCENT */
+  .neon-cyan {
+    color: var(--cyan);
+    text-shadow: 0 0 10px rgba(0, 255, 229, 0.5);
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .scroll-indicator::before {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(180deg, var(--cyan), transparent);
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    #hero { padding: 6rem 1.5rem 4rem; }
+    section { padding: 4rem 1.5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .corner-deco { display: none; }
+    footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">VFERREI<span>21</span></a>
+  <ul class="nav-links">
+    <li><a href="#projetos">Projetos</a></li>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="https://github.com/vferrei21" target="_blank" rel="noopener">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div style="position:relative; z-index:1;">
+  <section id="hero" style="max-width:100%; padding-top:9rem;">
+    <p class="hero-label">Portfolio — vferrei21</p>
+    <h1 class="glitch" data-text="VFERREI">VFERREI</h1>
+    <p class="hero-sub">Dev · XR · Interactive</p>
+    <p class="hero-desc">
+      Construo experiências digitais na interseção entre código, espaço e interatividade.
+      Unity3D, WebGL, AR/VR e dashboards com dados em tempo real.
+    </p>
+    <a href="#projetos" class="hero-cta">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      Ver projetos
+    </a>
+    <div class="corner-deco" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="scroll-indicator" aria-hidden="true">Scroll</div>
+  </section>
+</div>
+
+<!-- PROJECTS -->
+<section id="projetos">
+  <p class="section-label">// 01 — Repositórios</p>
+  <h2 class="section-title">Projetos em Destaque</h2>
+
+  <div class="projects-grid">
+
+    <!-- AR/VR -->
+    <a class="project-card" href="https://vferrei21.github.io/AR-VR_proj/" target="_blank" rel="noopener">
+      <div class="bracket-tl"></div>
+      <div class="bracket-br"></div>
+      <span class="card-tag tag-magenta">AR · VR · XR</span>
+      <span class="card-icon">⬡</span>
+      <h3 class="card-title">NEXUS — XR Portal</h3>
+      <p class="card-desc">
+        Dois universos imersivos em torno da arquitetura distópica do futuro.
+        Explora sectores abandonados em VR 360° ou materializa uma torre neon no
+        teu espaço físico com AR.
+      </p>
+      <div class="card-stack">
+        <span class="stack-pill">WebXR</span>
+        <span class="stack-pill">A-Frame</span>
+        <span class="stack-pill">Three.js</span>
+        <span class="stack-pill">AR.js</span>
+      </div>
+      <div class="card-link">
+        Abrir projeto
+        <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+    </a>
+
+    <!-- Unity -->
+    <a class="project-card" href="https://vferrei21.github.io/Unity_Proj/" target="_blank" rel="noopener">
+      <div class="bracket-tl"></div>
+      <div class="bracket-br"></div>
+      <span class="card-tag tag-cyan">Unity3D · WebGL</span>
+      <span class="card-icon">🪐</span>
+      <h3 class="card-title">Câmara Interativa 3D</h3>
+      <p class="card-desc">
+        Dois projetos Unity exportados para WebGL — um visualizador orbital com
+        controlo por slider e um realizador cinematográfico com 4 planos Cinemachine
+        em tempo real.
+      </p>
+      <div class="card-stack">
+        <span class="stack-pill">Unity 2022</span>
+        <span class="stack-pill">Cinemachine</span>
+        <span class="stack-pill">WebGL</span>
+        <span class="stack-pill">Mixamo</span>
+      </div>
+      <div class="card-link">
+        Abrir projeto
+        <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+    </a>
+
+    <!-- Portfolio -->
+    <a class="project-card" href="https://vferrei21.github.io/Portf-lio_Interativo/" target="_blank" rel="noopener">
+      <div class="bracket-tl"></div>
+      <div class="bracket-br"></div>
+      <span class="card-tag tag-violet">Frontend · UI</span>
+      <span class="card-icon">◈</span>
+      <h3 class="card-title">Portfolio Interativo</h3>
+      <p class="card-desc">
+        Uma experiência de portfolio pessoal com interações ricas e animações.
+        Navegação fluida, design responsivo e apresentação visual dos projetos
+        e competências.
+      </p>
+      <div class="card-stack">
+        <span class="stack-pill">HTML</span>
+        <span class="stack-pill">CSS</span>
+        <span class="stack-pill">JavaScript</span>
+      </div>
+      <div class="card-link">
+        Abrir projeto
+        <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+    </a>
+
+    <!-- Dashboards -->
+    <a class="project-card" href="https://vferrei21.github.io/My_DashBoards/" target="_blank" rel="noopener">
+      <div class="bracket-tl"></div>
+      <div class="bracket-br"></div>
+      <span class="card-tag tag-cyan">Dados · API</span>
+      <span class="card-icon">◧</span>
+      <h3 class="card-title">MyDashboards</h3>
+      <p class="card-desc">
+        Coleção de dashboards web — meteorologia com hora do dia em tempo real
+        e um gerador/editor de imagens com IA. Dados dinâmicos com APIs externas.
+      </p>
+      <div class="card-stack">
+        <span class="stack-pill">API REST</span>
+        <span class="stack-pill">JavaScript</span>
+        <span class="stack-pill">AI Image</span>
+      </div>
+      <div class="card-link">
+        Abrir projeto
+        <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="sobre">
+  <p class="section-label">// 02 — Sistema</p>
+  <h2 class="section-title">Sobre</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        Dev focado em <strong>experiências interativas</strong> — desde jogos WebGL e
+        visualizações 3D até realidade aumentada e aumentada.
+      </p>
+      <p>
+        Trabalho maioritariamente com <strong>Unity3D</strong>, tecnologias web nativas e
+        frameworks XR. Aprecio projetos que cruzam <strong>código e espaço físico</strong>.
+      </p>
+      <p>
+        Todos os repositórios estão disponíveis no
+        <a href="https://github.com/vferrei21" target="_blank" rel="noopener" style="color:var(--cyan); text-decoration:none;">GitHub ↗</a>
+      </p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <span class="stat-num">4</span>
+        <span class="stat-label">Projetos ativos</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">2</span>
+        <span class="stat-label">Modos XR</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">3D</span>
+        <span class="stat-label">WebGL builds</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">∞</span>
+        <span class="stat-label">Iterações</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">VFERREI<span>21</span></span>
+  <span class="footer-copy">© 2025 — Todos os projetos no GitHub Pages</span>
+  <a href="https://github.com/vferrei21" target="_blank" rel="noopener" class="github-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.341-3.369-1.341-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+    </svg>
+    github.com/vferrei21
+  </a>
+</footer>
+
+<script>
+  // Cursor glow
+  const glow = document.getElementById('cursorGlow');
+  document.addEventListener('mousemove', e => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+
+  // Intersection observer for fade-in
+  const cards = document.querySelectorAll('.project-card, .stat-box');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = e.target.classList.contains('project-card')
+          ? 'translateY(0)' : 'none';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  cards.forEach(c => {
+    c.style.opacity = '0';
+    c.style.transform = c.classList.contains('project-card') ? 'translateY(20px)' : 'none';
+    c.style.transition = 'opacity 0.6s ease, transform 0.6s ease, border-color 0.3s';
+    io.observe(c);
+  });
+</script>
+</body>
+</html>
